@@ -11,12 +11,14 @@ public class Player : MonoBehaviour {
 	private Rigidbody rb;
 	private bool onFloor;
 	private float lastJumpRequestTime = 0;
+	private GameState state;
 
 	// Use this for initialization
 	void Start () {
 	Cardboard.SDK.OnTrigger += PullTrigger;
 	head = GameObject.FindObjectOfType<CardboardHead>();
 	rb = GetComponent<Rigidbody>();
+	state = GameObject.FindObjectOfType<GameState>();
 	}
 
 	void PullTrigger () {
@@ -29,10 +31,15 @@ public class Player : MonoBehaviour {
 	}
 
 	void Jump(){
-		float jumpAngleInRadians = jumpAngleInDegrees * Mathf.Deg2Rad;
-		Vector3 projectedVector = Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.up);
-		Vector3 jumpVector = Vector3.RotateTowards(projectedVector, Vector3.up, jumpAngleInRadians, 0);
-		rb.velocity = jumpVector * jumpSpeed;
+		if (!state.IsGameOver) {
+			float jumpAngleInRadians = jumpAngleInDegrees * Mathf.Deg2Rad;
+			Vector3 jumpVector = Vector3.RotateTowards(LookDirection(), Vector3.up, jumpAngleInRadians, 0);
+			rb.velocity = jumpVector * jumpSpeed;
+		}
+	}
+
+	public Vector3 LookDirection () {
+		return Vector3.ProjectOnPlane(head.Gaze.direction, Vector3.up);
 	}
 
 	void OnCollisionStay(Collision collision){
@@ -41,10 +48,5 @@ public class Player : MonoBehaviour {
 			Jump();
 			lastJumpRequestTime = 0;
 		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 }

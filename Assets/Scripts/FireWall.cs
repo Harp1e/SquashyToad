@@ -3,16 +3,40 @@ using System.Collections;
 
 public class FireWall : MonoBehaviour {
 
+	public float creepSpeed = 0.01f;
+
+	private Player player;
+	private GameState state;
+
 	// Use this for initialization
 	void Start () {
-	
+		player = GameObject.FindObjectOfType<Player>();
+		state = GameObject.FindObjectOfType<GameState>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		GameObject player = GameObject.Find("Player");
+		if (!state.IsGameOver){
+			FollowPlayer ();
+			CreepForward();
+			CheckPlayerBurnt();
+		}
+	}
+
+	void FollowPlayer () {
 		Vector3 delta = player.transform.transform.position - transform.position;
 		Vector3 projectedDelta = Vector3.Project(delta, Vector3.left);
 		transform.position += projectedDelta;
+	}
+
+	void CreepForward () {
+		transform.position += Vector3.forward * creepSpeed * Time.deltaTime;
+	}
+
+	void CheckPlayerBurnt() {
+		if (player.transform.position.z < transform.position.z) {
+			state.IsGameOver = true;
+
+		}
 	}
 }
