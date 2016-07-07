@@ -8,14 +8,14 @@ public class GameOverMessage : MonoBehaviour {
 
 	private Player player;
 	private Canvas canvas;
-	private GameState state;
+	private LevelState state;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindObjectOfType<Player>();
 		canvas = GetComponent<Canvas>();
 		canvas.enabled = false;
-		state = GameObject.FindObjectOfType<GameState>();
+		state = GameObject.FindObjectOfType<LevelState>();
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,7 @@ public class GameOverMessage : MonoBehaviour {
 		if (state.IsGameOver) {
 			TrackPlayerHead();
 			canvas.enabled = true;
-			Debug.Log("Game Over triggered");
+//			Debug.Log("Game Over triggered");
 		}
 	}
 

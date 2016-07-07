@@ -3,13 +3,15 @@ using System.Collections;
 
 public class GameState : MonoBehaviour {
 
-	public bool IsGameOver {get; set;}
+	public int highScore;
 
-	public void ResetGame(){
-		Application.LoadLevel("Main");
+	void Awake() {
+		DontDestroyOnLoad(gameObject);
 	}
 
-	public void BackToMenu() {
-		Application.LoadLevel("SplashScreen");
+	public void UpdateHighScore(int newScore){
+		if (newScore > highScore) {
+			highScore = newScore;
+		}
 	}
 }
